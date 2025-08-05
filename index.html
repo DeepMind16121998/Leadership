@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VotePay - Secure voting and payment platform with referral rewards and VIP benefits">
+    <meta name="keywords" content="voting, payment, rewards, referral, platform">
+    <meta name="author" content="VotePay Team">
+    <title>VotePay - Voting & Payment Platform</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗳️</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="light">
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-message">Operation successful!</span>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button id="mobileMenuBtn" class="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+    <!-- Sidebar Menu -->
+    <nav id="sidebarMenu" class="sidebar-menu" style="display:none; position:fixed; left:0; top:0; height:100%; width:250px; background:#fff; z-index:1000; box-shadow:2px 0 8px rgba(0,0,0,0.1);">
+        <ul class="list-unstyled m-0 p-4">
+            <li><button class="sidebar-nav-btn btn w-100 text-start mb-2" data-page="dashboard"><i class="fas fa-home me-2"></i>Dashboard</button></li>
+            <li><button class="sidebar-nav-btn btn w-100 text-start mb-2" data-page="missions"><i class="fas fa-tasks me-2"></i>Missions</button></li>
+            <li><button class="sidebar-nav-btn btn w-100 text-start mb-2" data-page="marketplace"><i class="fas fa-store me-2"></i>Store</button></li>
+            <li><button class="sidebar-nav-btn btn w-100 text-start mb-2" data-page="platform-users"><i class="fas fa-users me-2"></i>Platform Users</button></li>
+        </ul>
+    </nav>
+
+    <!-- Authentication Section -->
+    <section id="authentication" class="auth-section">
+        <div class="auth-container">
+            <div class="auth-hero">
+                <div class="floating-element floating-1"></div>
+                <div class="floating-element floating-2"></div>
+                <div class="floating-element floating-3"></div>
+                <div class="container text-center text-white position-relative" style="z-index: 2;">
+                    <h1 class="display-4 fw-bold mb-3">Welcome to VotePay</h1>
+                    <p class="lead mb-4">Earn rewards through voting, referrals, and secure payments</p>
+                    <div class="logo mb-4">
+                        <i class="fas fa-vote-yea text-white me-2"></i>
+                        <span class="fw-bold">VotePay</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="auth-form-container">
+                <ul class="nav nav-tabs nav-justified mb-4" id="authTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Login</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">Register</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="authTabContent">
+                    <!-- Login Form -->
+                    <div class="tab-pane fade show active" id="login" role="tabpanel">
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <label for="loginIdentifier" class="form-label">Phone Number or Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" class="form-control" id="loginIdentifier" placeholder="Enter phone or email" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="loginPassword" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input type="password" class="form-control" id="loginPassword" placeholder="Enter password" required>
+                                </div>
+                            </div>
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary btn-submit">
+                                    <span class="button-text">Sign In</span>
+                                    <span class="loading-spinner spinner-border spinner-border-sm" role="status" style="display: none;"></span>
+                                </button>
+                            </div>
+                            <div class="text-center">
+                                <a href="#" class="text-decoration-none">Forgot Password?</a>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Register Form -->
+                    <div class="tab-pane fade" id="register" role="tabpanel">
+                        <form id="registerForm">
+                            <div class="mb-3">
+                                <label for="regName" class="form-label">Full Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" class="form-control" id="regName" placeholder="Enter full name" required>
+                                    <div class="invalid-feedback">Please enter a valid name (min. 2 characters)</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="regPhone" class="form-label">Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="tel" class="form-control" id="regPhone" placeholder="Enter 10-digit phone number" required>
+                                    <div class="invalid-feedback">Please enter a valid 10-digit phone number</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="regEmail" class="form-label">Email Address (Optional)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" class="form-control" id="regEmail" placeholder="Enter email address">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="regPassword" class="form-label">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input type="password" class="form-control" id="regPassword" placeholder="Create password" required>
+                                    <div class="invalid-feedback">Password must be at least 8 characters</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="regConfirmPassword" class="form-label">Confirm Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                    <input type="password" class="form-control" id="regConfirmPassword" placeholder="Confirm password" required>
+                                    <div class="invalid-feedback">Passwords do not match</div>
+                                </div>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="termsCheck" required>
+                                <label class="form-check-label" for="termsCheck">
+                                    I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a>
+                                    <div class="invalid-feedback">You must agree to the terms</div>
+                                </label>
+                            </div>
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-success btn-submit">
+                                    <span class="button-text">Create Account</span>
+                                    <span class="loading-spinner spinner-border spinner-border-sm" role="status" style="display: none;"></span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <p class="mb-0">Already have an account? <a href="#" id="switchToLogin" class="text-decoration-none">Sign In</a></p>
+                    <p class="mb-0">New user? <a href="#" id="switchToRegister" class="text-decoration-none">Create Account</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Platform Users Page -->
+    <div id="page-platform-users" class="dashboard-page max-w-md mx-auto px-4 pb-20" style="display:none;">
+        <div class="mt-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4"><i class="fas fa-users mr-2 text-[#43cea2]"></i>Platform Users</h2>
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="p-4">
+                    <div class="table-responsive" style="height: 400px; overflow: hidden; position: relative;">
+                        <table class="table table-striped mb-0" id="usersTable" style="margin-bottom:0;">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>UserID</th>
+                                    <th>Full Name</th>
+                                    <th>Status</th>
+                                    <th>Amount (₹)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- User rows will be injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="dashboard-section" style="display: none;">
+        <!-- Dashboard Pages -->
+        <!-- Dashboard Page -->
+        <div id="page-dashboard" class="container dashboard-page max-w-md mx-auto px-4 pb-20">
+            <!-- Modern Realistic Dashboard Background -->
+            <div class="relative mb-6 -mx-4">
+                <div class="absolute inset-0 z-0" style="height:180px; background: linear-gradient(135deg, #43cea2 0%, #185a9d 60%, #8E2DE2 100%); border-bottom-left-radius: 2rem; border-bottom-right-radius: 2rem; box-shadow: 0 4px 24px rgba(67,206,162,0.18); overflow:hidden;">
+                    <!-- Optional: Animated floating shapes for extra visual effect -->
+                    <div style="position:absolute;top:30px;left:20px;width:60px;height:60px;background:rgba(255,255,255,0.18);border-radius:50%;backdrop-filter:blur(4px);animation:float1 6s infinite alternate;"></div>
+                    <div style="position:absolute;top:120px;right:40px;width:48px;height:48px;background:rgba(255,255,255,0.12);border-radius:50%;backdrop-filter:blur(2px);animation:float2 7s infinite alternate;"></div>
+                    <div style="position:absolute;top:80px;left:120px;width:36px;height:36px;background:rgba(255,255,255,0.10);border-radius:50%;backdrop-filter:blur(2px);animation:float3 5s infinite alternate;"></div>
+                    <div style="position:absolute;top:60px;right:100px;width:80px;height:24px;background:linear-gradient(90deg,#fff3,#fff0);border-radius:12px;filter:blur(2px);animation:float4 8s infinite alternate;"></div>
+                </div>
+                <!-- Modern Mobile Header -->
+                <header class="mobile-header" style="width:90vw; max-width:420px; height:10vw; min-height:36px; max-height:44px; margin:0 auto; border-radius:1.2em; background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%); display:flex; align-items:center; justify-content:center; box-shadow:0 2px 12px rgba(67,206,162,0.10);">
+                  <span style="display:block; width:100%; text-align:center; color:#fff; font-family:'Poppins',sans-serif; font-weight:500; font-size:clamp(0.8rem,3vw,1.1rem); letter-spacing:-0.04em; padding:0 0.5em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; animation:fadeInMobileHeader 1.2s;">
+                    Welcome to <span id="username" style="font-weight:500;">Neeraj Kumar</span> at <span style="color:#ffd200; font-weight:600;">VotePay Leadership Mission</span>
+                  </span>
+                </header>
+                <style>
+                  @keyframes fadeInMobileHeader {
+                    0% { opacity: 0; transform: translateY(-10px) scale(0.98); }
+                    100% { opacity: 1; transform: translateY(0) scale(1); }
+                  }
+                  .mobile-header span {
+                    font-stretch: condensed;
+                    font-weight: 500;
+                    letter-spacing: -0.04em;
+                  }
+                </style>
+            </div>
+
+            <!-- Glassmorphism Balance Card -->
+            <div class="glass-card p-6 mb-6 flex justify-between items-center shadow-2xl" style="border-radius:2rem;backdrop-filter:blur(12px);background:rgba(255,255,255,0.22);box-shadow:0 8px 32px rgba(67,206,162,0.18);">
+                <div>
+                    <p class="text-gray-100 text-sm font-medium">Available Balance</p>
+                    <h2 class="text-4xl font-extrabold text-white drop-shadow" style="text-shadow:0 2px 8px #43cea2cc;">₹1,260</h2>
+                    
+                </div>
+                <button id="refreshDashboard" class="bg-gradient-to-r from-[#43cea2] to-[#185a9d] text-white px-5 py-3 rounded-xl text-base flex items-center gap-2 font-bold shadow-lg hover:scale-105 transition-transform duration-200">
+                    <i class="fas fa-sync-alt text-lg"></i> Refresh
+                </button>
+            </div>
+            
+            <!-- Modern Quick Actions -->
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <button class="glass-card-action flex flex-col items-center p-4 rounded-2xl shadow-xl hover:scale-105 transition-transform duration-200" onclick="openWithdrawModal()" style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-[#43cea2] to-[#185a9d] text-white flex items-center justify-center mb-2 shadow-lg">
+                        <i class="fas fa-arrow-up text-2xl"></i>
+                    </div>
+                    <span class="text-sm font-semibold text-center text-[#185a9d]">Withdraw</span>
+                </button>
+                <button class="glass-card-action flex flex-col items-center p-4 rounded-2xl shadow-xl hover:scale-105 transition-transform duration-200" onclick="openBuyModal()" style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-[#8E2DE2] to-[#43cea2] text-white flex items-center justify-center mb-2 shadow-lg">
+                        <i class="fas fa-vote-yea text-2xl"></i>
+                    </div>
+                    <span class="text-sm font-semibold text-center text-[#8E2DE2]">Buy Votes</span>
+                </button>
+                <button class="glass-card-action flex flex-col items-center p-4 rounded-2xl shadow-xl hover:scale-105 transition-transform duration-200" data-page="referrals" style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-[#ffd200] to-[#f7971e] text-white flex items-center justify-center mb-2 shadow-lg">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <span class="text-sm font-semibold text-center text-[#f7971e]">Referrals</span>
+                </button>
+                <button class="glass-card-action flex flex-col items-center p-4 rounded-2xl shadow-xl hover:scale-105 transition-transform duration-200" data-page="marketplace" style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-br from-[#e44d26] to-[#f16529] text-white flex items-center justify-center mb-2 shadow-lg">
+                        <i class="fas fa-crown text-2xl"></i>
+                    </div>
+                    <span class="text-sm font-semibold text-center text-[#e44d26]">VIP</span>
+                </button>
+            </div>
+
+            <!-- Modern Stats Cards -->
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div class="glass-card p-6 flex items-center gap-4 rounded-2xl shadow-xl" style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#43cea2] to-[#185a9d] text-white flex items-center justify-center shadow-lg">
+                        <i class="fas fa-vote-yea text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-100 text-xs font-medium">Total Votes</p>
+                        <h3 class="text-2xl font-extrabold text-white drop-shadow">250</h3>
+                    </div>
+                </div>
+                <div class="glass-card p-6 flex items-center gap-4 rounded-2xl shadow-xl" style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#8E2DE2] to-[#43cea2] text-white flex items-center justify-center shadow-lg">
+                        <i class="fas fa-users text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-100 text-xs font-medium">Referrals</p>
+                        <h3 class="text-2xl font-extrabold text-white drop-shadow">12</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modern Features Grid -->
+            <h3 class="text-lg font-extrabold mb-4 text-white drop-shadow" style="text-shadow:0 2px 8px #43cea2cc;">Features</h3>
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <button class="glass-card-action flex flex-col items-center p-4 rounded-2xl shadow-xl hover:scale-105 transition-transform duration-200" data-page="missions" style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#43cea2] to-[#185a9d] text-white flex items-center justify-center mb-2 shadow-lg">
+                        <i class="fas fa-tasks text-lg"></i>
+                    </div>
+                    <span class="text-xs text-center font-semibold text-[#185a9d]">Missions</span>
+                </button>
+                <button class="glass-card-action flex flex-col items-center p-4 rounded-2xl shadow-xl hover:scale-105 transition-transform duration-200" data-page="transactions" style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#8E2DE2] to-[#43cea2] text-white flex items-center justify-center mb-2 shadow-lg">
+                        <i class="fas fa-exchange-alt text-lg"></i>
+                    </div>
+                    <span class="text-xs text-center font-semibold text-[#8E2DE2]">History</span>
+                </button>
+                <button class="glass-card-action flex flex-col items-center p-4 rounded-2xl shadow-xl hover:scale-105 transition-transform duration-200" data-page="support" style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#ffd200] to-[#f7971e] text-white flex items-center justify-center mb-2 shadow-lg">
+                        <i class="fas fa-headset text-lg"></i>
+                    </div>
+                    <span class="text-xs text-center font-semibold text-[#f7971e]">Support</span>
+                </button>
+                <button class="glass-card-action flex flex-col items-center p-4 rounded-2xl shadow-xl hover:scale-105 transition-transform duration-200" onclick="showNotification('Notifications feature coming soon!')" style="background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-[#e44d26] to-[#f16529] text-white flex items-center justify-center mb-2 shadow-lg">
+                        <i class="fas fa-bell text-lg"></i>
+                    </div>
+                    <span class="text-xs text-center font-semibold text-[#e44d26]">Alerts</span>
+                </button>
+            </div>
+            
+            <!-- Recent Activity Card -->
+            <!-- Platform Users Table (replacing Recent Activity) -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-6">
+                <div class="p-4">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4"><i class="fas fa-users mr-2 text-[#43cea2]"></i>Platform Users</h2>
+                    <div class="table-responsive" style="height: 400px; overflow: hidden; position: relative;">
+                        <table class="table table-striped mb-0" id="usersTableDashboard" style="margin-bottom:0;">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>UserID</th>
+                                    <th>Full Name</th>
+                                    <th>Status</th>
+                                    <th>Amount (₹)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- User rows will be injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Missions Page -->
+        <div id="page-missions" class="dashboard-page max-w-md mx-auto px-4 pb-20" style="display:none;">
+            <div class="mt-6">
+                <div class="mb-4">
+                    <div class="bg-gradient-to-r from-[#43cea2] to-[#185a9d] text-white rounded-xl p-3 text-center font-bold text-lg shadow">
+                        You can earn up to ₹15,000 in week
+                    </div>
+                </div>
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800"><i class="fas fa-tasks mr-2 text-[#43cea2]"></i>Missions</h2>
+                    <button id="toggleCompletedMissions" class="text-gray-400 hover:text-[#43cea2] transition-colors">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Mission 1 -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+                        <div class="bg-gradient-to-r from-[#43cea2] to-[#185a9d] text-white p-4">
+                            <div class="flex justify-between items-center">
+                                <h5 class="font-bold">Daily Voting</h5>
+                                <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs">Active</span>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-gray-600 text-sm mb-3">Vote for your favorite candidate every day for 7 consecutive days.</p>
+                            <div class="mb-3">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Progress: 5/7 days</span>
+                                    <span>71%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 71%"></div>
+                                </div>
+                            </div>
+                            <p class="text-[#43cea2] font-medium mb-3"><i class="fas fa-gift mr-1"></i> Reward: ₹100 + 50 Votes</p>
+                            <button class="w-full bg-[#43cea2] text-white py-2 rounded-xl font-medium hover:bg-[#185a9d] transition-colors">Continue Mission</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Mission 2 -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+                        <div class="bg-gradient-to-r from-[#8E2DE2] to-[#4A00E0] text-white p-4">
+                            <div class="flex justify-between items-center">
+                                <h5 class="font-bold">Referral Challenge</h5>
+                                <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs">Active</span>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-gray-600 text-sm mb-3">Refer 3 friends to join VotePay and complete their first transaction.</p>
+                            <div class="mb-3">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Progress: 2/3 referrals</span>
+                                    <span>66%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 66%"></div>
+                                </div>
+                            </div>
+                            <p class="text-[#43cea2] font-medium mb-3"><i class="fas fa-gift mr-1"></i> Reward: ₹300 + VIP Access (7 days)</p>
+                            <button class="w-full bg-[#43cea2] text-white py-2 rounded-xl font-medium hover:bg-[#185a9d] transition-colors">Invite Friends</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Mission 3 -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+                        <div class="bg-gradient-to-r from-[#f7971e] to-[#ffd200] text-white p-4">
+                            <div class="flex justify-between items-center">
+                                <h5 class="font-bold">Voting Streak</h5>
+                                <span class="bg-yellow-500 text-black px-2 py-1 rounded-full text-xs">Coming Soon</span>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-gray-600 text-sm mb-3">Maintain a 30-day voting streak without missing a day.</p>
+                            <div class="mb-3">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Progress: Starts tomorrow</span>
+                                    <span>0%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <p class="text-[#43cea2] font-medium mb-3"><i class="fas fa-gift mr-1"></i> Reward: ₹1000 + Level Up</p>
+                            <button class="w-full bg-gray-300 text-gray-500 py-2 rounded-xl font-medium" disabled>Coming Soon</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Completed Missions -->
+                <div id="completedMissionsContent" class="mt-6 bg-white rounded-2xl shadow-lg overflow-hidden" style="display: none;">
+                    <div class="bg-gray-50 p-4 border-b">
+                        <h5 class="font-bold text-gray-800"><i class="fas fa-check-circle mr-2 text-green-500"></i>Completed Missions</h5>
+                    </div>
+                    <div class="p-4 space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-3">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-sm font-medium">First Vote</h6>
+                                    <p class="text-xs text-gray-500">Cast your first vote on VotePay</p>
+                                </div>
+                            </div>
+                            <div class="text-green-600 font-bold text-sm">₹25</div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-3">
+                                    <i class="fas fa-check text-xs"></i>
+                                </div>
+                                <div>
+                                    <h6 class="text-sm font-medium">Profile Setup</h6>
+                                    <p class="text-xs text-gray-500">Complete your profile information</p>
+                                </div>
+                            </div>
+                            <div class="text-green-600 font-bold text-sm">₹50</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marketplace Page -->
+        <div id="page-marketplace" class="dashboard-page max-w-md mx-auto px-4 pb-20" style="display:none;">
+            <div class="mt-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800"><i class="fas fa-store mr-2 text-[#43cea2]"></i>Store</h2>
+                    <div class="flex gap-2">
+                        <button class="text-gray-400 hover:text-[#43cea2] transition-colors"><i class="fas fa-filter"></i></button>
+                        <button class="text-gray-400 hover:text-[#43cea2] transition-colors"><i class="fas fa-sort"></i></button>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 mb-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                        <span class="text-blue-700 text-sm">Special limited-time offers for our users</span>
+                        <span class="bg-red-500 text-white px-2 py-1 rounded-full text-xs ml-2">Limited Stock</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Product 1 -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+                        <div class="h-32 bg-gradient-to-br from-[#43cea2] to-[#185a9d] flex items-center justify-center">
+                            <i class="fas fa-vote-yea text-4xl text-white"></i>
+                        </div>
+                        <div class="p-4">
+                            <h5 class="font-bold text-sm mb-1">Standard Vote Pack</h5>
+                            <p class="text-gray-500 text-xs mb-3">Get 100 votes to support your favorite Party</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[#43cea2] font-bold">₹500</span>
+                                <button class="bg-[#43cea2] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#185a9d] transition-colors" onclick="openBuyModal()">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 2 -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+                        <div class="h-32 bg-gradient-to-br from-[#8E2DE2] to-[#4A00E0] flex items-center justify-center">
+                            <i class="fas fa-star text-4xl text-white"></i>
+                        </div>
+                        <div class="p-4">
+                            <h5 class="font-bold text-sm mb-1">Premium Vote Pack</h5>
+                            <p class="text-gray-500 text-xs mb-3">250 votes + special badge for your profile</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[#43cea2] font-bold">₹1,200</span>
+<button class="bg-[#43cea2] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#185a9d] transition-colors" onclick="openBuyModal()">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 3 -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+                        <div class="h-32 bg-gradient-to-br from-[#f7971e] to-[#ffd200] flex items-center justify-center">
+                            <i class="fas fa-crown text-4xl text-white"></i>
+                        </div>
+                        <div class="p-4">
+                            <h5 class="font-bold text-sm mb-1">VIP Membership</h5>
+                            <p class="text-gray-500 text-xs mb-3">30 days of VIP benefits and exclusive voting power</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[#43cea2] font-bold">₹750</span>
+                                <button class="bg-[#43cea2] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#185a9d] transition-colors" onclick="openBuyModal()">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 4 -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+                        <div class="h-32 bg-gradient-to-br from-[#e44d26] to-[#f16529] flex items-center justify-center">
+                            <i class="fas fa-paint-brush text-4xl text-white"></i>
+                        </div>
+                        <div class="p-4">
+                            <h5 class="font-bold text-sm mb-1">Profile Themes</h5>
+                            <p class="text-gray-500 text-xs mb-3">Special frames, badges, and profile customization</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[#43cea2] font-bold">₹299</span>
+                                <button class="bg-[#43cea2] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#185a9d] transition-colors" onclick="openBuyModal()">Customize</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 5 -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+                        <div class="h-32 bg-gradient-to-br from-[#11998e] to-[#38ef7d] flex items-center justify-center">
+                            <i class="fas fa-user-plus text-4xl text-white"></i>
+                        </div>
+                        <div class="p-4">
+                            <h5 class="font-bold text-sm mb-1">Referral Boost</h5>
+                            <p class="text-gray-500 text-xs mb-3">Boost your referral rewards with this special pack</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[#43cea2] font-bold">₹450</span>
+                                <button class="bg-[#43cea2] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#185a9d] transition-colors" onclick="openBuyModal()">Get Pack</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product 6 -->
+                    <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+                        <div class="h-32 bg-gradient-to-br from-[#667eea] to-[#764ba2] flex items-center justify-center">
+                            <i class="fas fa-bolt text-4xl text-white"></i>
+                        </div>
+                        <div class="p-4">
+                            <h5 class="font-bold text-sm mb-1">Power Pack</h5>
+                            <p class="text-gray-500 text-xs mb-3">500 votes + VIP + exclusive features</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[#43cea2] font-bold">₹2,000</span>
+                                <button class="bg-[#43cea2] text-white px-3 py-1 rounded-lg text-xs hover:bg-[#185a9d] transition-colors" onclick="openBuyModal()">Buy Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Withdraw Modal -->
+    <div class="modal fade" id="withdrawModal" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="withdrawModalLabel"><i class="fas fa-arrow-circle-up me-2"></i>Withdraw Funds</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2 text-info"></i>
+                        Minimum withdrawal amount is ₹200.00
+                    </p>
+                    <p class="text-muted small">
+                        <i class="fas fa-clock me-2 text-info"></i>
+                        Withdrawals are processed within 10 - 30  minutes
+                    </p>
+                    <p class="text-muted small">
+                        <i class="fas fa-shield-alt me-2 text-info"></i>
+                        Bank details are securely encrypted
+                    </div>
+                    
+                    <div class="progress mb-3" data-bs-toggle="tooltip" title="You need ₹740 more to reach the next withdrawal milestone">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 42%"></div>
+                    </div>
+                    
+                    <form>
+                        <div class="mb-3">
+                            <label for="withdrawAmount" class="form-label">Amount (₹)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" class="form-control" id="withdrawAmount" placeholder="Enter amount" min="200" max="1260" value="200">
+                            </div>
+                            <div class="form-text">Available Balance: ₹1,260</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Withdrawal Method</label>
+                            <div class="payment-methods">
+                                <div class="payment-method-card" onclick="selectPaymentMethod('Bank Transfer')">
+                                    <input type="radio" name="method" value="Bank Transfer" id="bankTransfer">
+                                    <label for="bankTransfer" class="d-flex align-items-center p-3 border rounded">
+                                        <i class="fas fa-university fa-2x me-3 text-primary"></i>
+                                        <div>
+                                            <h6 class="mb-0">Bank Transfer</h6>
+                                            <small class="text-muted">2-3 business days</small>
+                                        </div>
+                                        <i class="fas fa-check-circle ms-auto" style="display: none;"></i>
+                                    </label>
+                                </div>
+                                
+                                <div class="payment-method-card" onclick="selectPaymentMethod('UPI')">
+                                    <input type="radio" name="method" value="UPI" id="upiMethod">
+                                    <label for="upiMethod" class="d-flex align-items-center p-3 border rounded mt-2">
+                                        <i class="fas fa-mobile-alt fa-2x me-3 text-success"></i>
+                                        <div>
+                                            <h6 class="mb-0">UPI Payment</h6>
+                                            <small class="text-muted">Instant transfer</small>
+                                        </div>
+                                        <i class="fas fa-check-circle ms-auto" style="display: none;"></i>
+                                    </label>
+                                </div>
+                                
+                                <div class="payment-method-card" onclick="selectPaymentMethod('QR Code')">
+                                    <input type="radio" name="method" value="QR Code" id="qrMethod">
+                                    <label for="qrMethod" class="d-flex align-items-center p-3 border rounded mt-2">
+                                        <i class="fas fa-qrcode fa-2x me-3 text-warning"></i>
+                                        <div>
+                                            <h6 class="mb-0">QR Code</h6>
+                                            <small class="text-muted">Scan to withdraw</small>
+                                        </div>
+                                        <i class="fas fa-check-circle ms-auto" style="display: none;"></i>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Conditional Fields -->
+                        <div id="bankFields" style="display: none;">
+                            <div class="mb-3">
+                                <label for="accountNumber" class="form-label">Account Number</label>
+                                <input type="text" class="form-control" id="accountNumber" placeholder="Enter account number">
+                            </div>
+                            <div class="mb-3">
+                                <label for="ifscCode" class="form-label">IFSC Code</label>
+                                <input type="text" class="form-control" id="ifscCode" placeholder="Enter IFSC code">
+                            </div>
+                        </div>
+                        
+                        <div id="upiField" style="display: none;">
+                            <div class="mb-3">
+                                <label for="upiId" class="form-label">UPI ID</label>
+                                <input type="text" class="form-control" id="upiId" placeholder="Enter UPI ID (e.g., mobile@upi)">
+                            </div>
+                        </div>
+                        
+                        <div id="qrField" style="display: none;" class="text-center">
+                            <p>Scan this QR code with your UPI app to complete the withdrawal:</p>
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0xMjAgNDBIMTQwdjIwSDEyMFY0MHpNMTYwIDQwSDE4MHYyMEgxNjBWNDB6TTQwIDYwSDYwdjIwSDQwVjYwek04MCA2MEgxMDB2MjBIOFY2MHpNMTIwIDYwSDE0MHYyMEgxMjBWNjB6TTE2MCA2MEgxODB2MjBIMTYwVjYwek00MCA4MEg2MHYyMEg0MFY4MHpNODAgODBIMTAwdjIwSDgwVjgwek0xMjAgODBIMTQwdjIwSDEyMFY4MHpNMTYwIDgwSDE4MHYyMEgxNjBWOHB6TTQwIDEwMEg2MHYyMEg0MFYxMDB6TTgwIDEwMEgxMDB2MjBIOFYxMDB6TTEyMCAxMDBIMTQwdjIwSDEyMFYxMDB6TTE2MCAxMDBIMTgwdjIwSDE2MFYxMDB6TTQwIDEyMEg2MHYyMEg0MFYxMjB6TTgwIDEyMEgxMDB2MjBIOFYxMjB6TTEyMCAxMjBIMTQwdjIwSDEyMFYxMjB6TTE2MCAxMjBIMTgwdjIwSDE2MFYxMjB6IiBmaWxsPSIjMDAwIi8+PC9zdmc+" class="img-fluid" alt="Withdrawal QR Code" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Process Withdrawal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buy Votes Modal -->
+    <div class="modal fade" id="buyModal" tabindex="-1" aria-labelledby="buyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="buyModalLabel"><i class="fas fa-shopping-cart me-2"></i>Buy Votes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-circle me-2 text-warning"></i> 
+                        After payment, please contact support at <strong>support@votepay.com</strong> or upload payment proof for order processing.
+                    </div>
+                    
+                    <form>
+                        <div class="mb-3">
+                            <label for="votePackage" class="form-label">Select Vote Package</label>
+                            <select class="form-select" id="votePackage">
+                                <option value="100">100 Votes - ₹500</option>
+                                <option value="250">250 Votes - ₹1,200</option>
+                                <option value="500">500 Votes - ₹2,200</option>
+                                <option value="1000">1000 Votes - ₹4,000</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="paymentMethod" class="form-label">Payment Method</label>
+                            <select class="form-select" id="paymentMethod">
+                                <option value="upi">UPI</option>
+                                <option value="bank">Bank Transfer</option>
+                                <option value="card">Credit/Debit Card</option>
+                                <option value="wallet">Digital Wallet</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Amount (₹)</label>
+                            <input type="text" class="form-control" id="amount" value="₹500" readonly>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success">Proceed to Payment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-2 px-4 max-w-md mx-auto shadow-lg rounded-t-2xl z-50">
+        <div class="flex justify-around">
+            <button class="flex flex-col items-center text-[#43cea2] mobile-nav-btn" data-page="dashboard">
+                <i class="fas fa-home text-lg mb-1"></i>
+                <span class="text-xs font-medium">Home</span>
+            </button>
+            <button class="flex flex-col items-center text-gray-400 mobile-nav-btn" data-page="missions">
+                <i class="fas fa-tasks text-lg mb-1"></i>
+                <span class="text-xs font-medium">Missions</span>
+            </button>
+            <button class="flex flex-col items-center text-gray-400 mobile-nav-btn" data-page="marketplace">
+                <i class="fas fa-store text-lg mb-1"></i>
+                <span class="text-xs font-medium">Store</span>
+            </button>
+            <button class="flex flex-col items-center text-gray-400 mobile-nav-btn" data-page="platform-users">
+                <i class="fas fa-users text-lg mb-1"></i>
+                <span class="text-xs font-medium">Platform Users</span>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Chart.js for potential future use -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Your main script -->
+    <script src="script.js"></script>
+</body>
+</html>
+    const dummyUsers = [
+        {id: '001', name: 'Rahul Kumar', status: 'Successful', amount: 500},
+        {id: '002', name: 'Priya Singh', status: 'Successful', amount: 1200},
+        {id: '003', name: 'Amit Sharma', status: 'Successful', amount: 800},
+        {id: '004', name: 'Neha Verma', status: 'Successful', amount: 650},
+        {id: '005', name: 'Rohit Gupta', status: 'Successful', amount: 900},
+        {id: '006', name: 'Sneha Patel', status: 'Successful', amount: 700},
+        {id: '007', name: 'Vikas Yadav', status: 'Successful', amount: 1100},
+        {id: '008', name: 'Anjali Mehra', status: 'Successful', amount: 950},
+        {id: '009', name: 'Karan Joshi', status: 'Successful', amount: 600},
+        {id: '010', name: 'Deepak Saini', status: 'Successful', amount: 750},
+        {id: '011', name: 'Meena Kumari', status: 'Successful', amount: 850},
+        {id: '012', name: 'Suresh Rathi', status: 'Successful', amount: 1000},
+        {id: '013', name: 'Pooja Agarwal', status: 'Successful', amount: 1200},
+        {id: '014', name: 'Manish Jain', status: 'Successful', amount: 500},
+        {id: '015', name: 'Ritu Singh', status: 'Successful', amount: 650},
+        {id: '016', name: 'Arjun Kapoor', status: 'Successful', amount: 700},
+        {id: '017', name: 'Simran Kaur', status: 'Successful', amount: 800},
+        {id: '018', name: 'Naveen Kumar', status: 'Successful', amount: 900},
+        {id: '019', name: 'Divya Pandey', status: 'Successful', amount: 950},
+        {id: '020', name: 'Gaurav Mishra', status: 'Successful', amount: 1100},
+        {id: '021', name: 'Asha Rani', status: 'Successful', amount: 1000},
+        {id: '022', name: 'Sanjay Chauhan', status: 'Successful', amount: 1200},
+        {id: '023', name: 'Rakesh Kumar', status: 'Pending', amount: 700},
+        {id: '024', name: 'Sunita Sharma', status: 'Pending', amount: 800},
+        {id: '025', name: 'Ajay Singh', status: 'Pending', amount: 900},
+        {id: '026', name: 'Kavita Joshi', status: 'Pending', amount: 650},
+        {id: '027', name: 'Mohit Verma', status: 'Pending', amount: 750},
+        {id: '028', name: 'Preeti Gupta', status: 'Rejected', amount: 0},
+        {id: '029', name: 'Vinod Yadav', status: 'Rejected', amount: 0},
+        {id: '030', name: 'Ramesh Saini', status: 'Rejected', amount: 0}
+    ];
+
+    // Render users and animate table scroll for both tables
+    function renderUsersTable(tableId = 'usersTable') {
+        const tbody = document.querySelector(`#${tableId} tbody`);
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        dummyUsers.forEach(user => {
+            let statusClass = user.status === 'Successful' ? 'text-success' : (user.status === 'Pending' ? 'text-warning' : 'text-danger');
+            tbody.innerHTML += `<tr><td>${user.id}</td><td>${user.name}</td><td class='${statusClass}'>${user.status}</td><td>${user.amount > 0 ? '₹' + user.amount : '-'}</td></tr>`;
+        });
+    }
+
+    // Animate table scroll from bottom to top for a given table
+    function animateTableScroll(tableId = 'usersTable') {
+        const container = document.querySelector(`#${tableId}`).closest('.table-responsive');
+        if (!container) return;
+        let scrollAmount = 0;
+        const maxScroll = container.scrollHeight - container.clientHeight;
+        container.scrollTop = maxScroll;
+        const interval = setInterval(() => {
+            if (container.scrollTop > 0) {
+                container.scrollTop -= 1;
+            } else {
+                clearInterval(interval);
+            }
+        }, 20); // Adjust speed as needed
+    }
+
+    // Render users table in dashboard on load
+    document.addEventListener('DOMContentLoaded', function() {
+        renderUsersTable('usersTableDashboard');
+        setTimeout(() => animateTableScroll('usersTableDashboard'), 300);
+    });
+
+    // Show/hide dashboard pages from mobile nav
+    document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const page = this.getAttribute('data-page');
+            document.querySelectorAll('.dashboard-page').forEach(pg => pg.style.display = 'none');
+            if (page === 'platform-users') {
+                document.getElementById('page-platform-users').style.display = '';
+                renderUsersTable();
+                setTimeout(animateTableScroll, 300); // Animate after render
+            } else if (page) {
+                const el = document.getElementById('page-' + page);
+                if (el) el.style.display = '';
+            }
+        });
+    });
+
+    // Show/hide dashboard pages from sidebar nav
+    document.querySelectorAll('.sidebar-nav-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('sidebarMenu').style.display = 'none';
+            document.getElementById('sidebarOverlay').style.display = 'none';
+            const page = this.getAttribute('data-page');
+            document.querySelectorAll('.dashboard-page').forEach(pg => pg.style.display = 'none');
+            if (page === 'platform-users') {
+                document.getElementById('page-platform-users').style.display = '';
+                renderUsersTable();
+                setTimeout(animateTableScroll, 300);
+            } else if (page) {
+                const el = document.getElementById('page-' + page);
+                if (el) el.style.display = '';
+            }
+        });
+    <!-- Chart.js for potential future use -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Your main script -->
+    <script src="script.js"></script>
+</body>
+</html>
